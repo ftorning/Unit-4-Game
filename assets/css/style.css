@@ -1,0 +1,17 @@
+body {
+	background-image: url(../images/background.jpg);
+	font-family: 'Fontdiner Swanky', cursive;
+	letter-spacing: 1px;
+}
+
+h1 {
+	text-align: center;
+	color: white;
+	font-size: 42px;
+}
+
+.card {
+	background-color: white;
+	padding:  20px;
+	margin: 20px;
+}

@@ -6,6 +6,7 @@ var opponent;
 var playerArea = $('#player-area');
 var opponentArea = $('#opponent-area');
 var title = $('#section-title');
+var atkBtn = $('#atk-btn');
 
 class Character {
     constructor(name, hitPoints, atkPower, defense, imgUrl) {
@@ -22,6 +23,7 @@ class Character {
 
     checkLevelUp() {
         if (this.exp >= (this.level * 10)) {
+            this.exp -= (this.level * 10);
             level++;
             this.atkPower * (1 + (level / 10));
             this.defend * (1 + (level / 10));
@@ -30,13 +32,13 @@ class Character {
     }
 
     attack() {
-        var atk = Math.random() * ((this.atkPower * 1.5) - this.atkPower) + this.atkPower;
+        var atk = Math.floor(Math.random() * ((this.atkPower * 1.5) - this.atkPower) + this.atkPower);
         this.exp += 10;
         return atk;
     }
 
     defend(opponent_attack) {
-        var def = Math.random() * ((this.defense * 1.5) - this.defense) + this.defense;
+        var def = Math.floor(Math.random() * ((this.defense * 0.5) - this.defense) + this.defense);
         if (opponent_attack > def) {
             this.currentHealth -= (opponent_attack - def);
             if (this.currentHealth <= 0) {
@@ -46,9 +48,10 @@ class Character {
             0;
         }
         this.exp += 10;
+        return def, opponent_attack
     }
 
-    getCard() {
+    createCard() {
         var charCard = $('<div/>');
         charCard.attr('id', this.name);
         charCard.addClass("card");
@@ -70,17 +73,44 @@ class Character {
         charTitle.text(this.name);
 
         var charHp = $('<p/>');
+        charHp.addClass('card-hp');
         charHp.text('Hit Points: ' + this.hitPoints);
         
         var charAttack = $('<p/>');
+        charAttack.addClass('card-atk');
         charAttack.text('Attack Power: ' + this.atkPower);
 
         var charDef = $('<p/>');
+        charDef.addClass('card-def');
         charDef.text('Defense: ' + this.defense);
 
-        charCardBody.append([charTitle, charHp, charAttack, charDef]);
+        var charHlth = $('<p/>');
+        charHlth.addClass('card-hlth');
+        charHlth.text('CurrentHealth: ' + this.currentHealth);
+        
+        charCardBody.append([charTitle, charHp, charAttack, charDef, charHlth]);
         charCard.append([charImg, charCardBody]);
         charListElems.append(charCard);
+    }
+   
+    getCard() {
+        return $('#' + this.name);
+    }
+
+    refreshCard() {
+        if (this.currentHealth <= 0) {
+            alert('You Lose!');
+        } else {
+            var card = this.getCard();
+            var hp = card.find(".card-hp");
+            hp.text('Hit Points: ' + this.hitPoints);
+            var atk = card.find(".card-atk");
+            atk.text('Attack Power: ' + this.atkPower);
+            var def = card.find(".card-def");
+            def.text('Defense: ' + this.defense);
+            var hlth = card.find(".card-hlth");
+            hlth.text('CurrentHealth: ' + this.currentHealth);
+        }
     }
    
 }
@@ -88,7 +118,7 @@ class Character {
 sponge = new Character("Spongebob", 100, 10, 10, './assets/images/spongebob.jpg');
 squid = new Character("Squidward", 90, 12, 8, './assets/images/squidward.png');
 star = new Character("Patrick", 120, 8, 12, './assets/images/patrick.gif');
-krab = new Character("Mr. Krabs", 150, 4, 15, './assets/images/MrKrabs.jpg');
+krab = new Character("Mr_Krabs", 150, 4, 15, './assets/images/MrKrabs.jpg');
 console.log(sponge);
 
 charList = [sponge, squid, star, krab];
@@ -96,9 +126,9 @@ charList = [sponge, squid, star, krab];
 // function popPlayerChoice
 function characterChoice() {
     $.each(charList, function(i) {
-        charList[i].getCard();
+        charList[i].createCard();
     })
-
+    
     $('#character-select .card').on('click', function() {
         if (!player) {
             for (var i = 0; i < charList.length; i++) {
@@ -123,9 +153,26 @@ function characterChoice() {
     })
 }
 
+function playerAttack() {
+    opponent.getCard().effect( "shake", {times:4}, 500 );;
+    var dmg = opponent.defend(player.attack());
+    opponent.refreshCard();
+    console.log(dmg);
+    console.log(opponent.currentHealth);
+    setTimeout(function() {
+        player.getCard().effect( "shake", {times:4}, 500 );;
+        var dmg = player.defend(player.attack());
+        player.refreshCard();
+    }, 1000);
+    
+    
+}
+
 
 $(document).ready(function() {
     characterChoice()
+
+    atkBtn.on('click', playerAttack);
 });
 
 

@@ -22,12 +22,12 @@ class Character {
     }
 
     checkLevelUp() {
-        if (this.exp >= (this.level * 10)) {
-            this.exp -= (this.level * 10);
-            level++;
-            this.atkPower * (1 + (level / 10));
-            this.defend * (1 + (level / 10));
-            this.hitPoints * (1 + (level / 10));
+        if (this.exp >= (this.level * 100)) {
+            this.exp -= (this.level * 100);
+            this.level++;
+            this.atkPower *= (1 + (this.level / 10));
+            this.defense *= (1 + (this.level / 10));
+            this.hitPoints *= (1 + (this.level / 10));
         }
     }
 
@@ -48,7 +48,7 @@ class Character {
             0;
         }
         this.exp += 10;
-        return def, opponent_attack
+        return (opponent_attack - def)
     }
 
     createCard() {
@@ -97,10 +97,16 @@ class Character {
         return $('#' + this.name);
     }
 
-    refreshCard() {
+    refreshCard(character) {
         if (this.currentHealth <= 0) {
-            alert('You Lose!');
+            if (character === "player") {
+                alert('You Lose!');
+            } else if (character === "opponent") {
+                alert('You win!')
+            }
+            
         } else {
+            this.checkLevelUp();
             var card = this.getCard();
             var hp = card.find(".card-hp");
             hp.text('Hit Points: ' + this.hitPoints);
@@ -154,15 +160,16 @@ function characterChoice() {
 }
 
 function playerAttack() {
-    opponent.getCard().effect( "shake", {times:4}, 500 );;
+    opponent.getCard().effect( "shake", {times:4}, 250 );
+    console.log(opponent);
     var dmg = opponent.defend(player.attack());
-    opponent.refreshCard();
+    opponent.refreshCard("opponent");
     console.log(dmg);
     console.log(opponent.currentHealth);
     setTimeout(function() {
-        player.getCard().effect( "shake", {times:4}, 500 );;
+        player.getCard().effect( "shake", {times:4}, 250 );
         var dmg = player.defend(player.attack());
-        player.refreshCard();
+        player.refreshCard("player");
     }, 1000);
     
     

@@ -94,8 +94,7 @@ console.log(sponge);
 charList = [sponge, squid, star, krab];
 
 // function popPlayerChoice
-
-$(document).ready(function() {
+function characterChoice() {
     $.each(charList, function(i) {
         charList[i].getCard();
     })
@@ -122,6 +121,11 @@ $(document).ready(function() {
             title.text('BATTLE');
         }
     })
+}
+
+
+$(document).ready(function() {
+    characterChoice()
 });
 
 

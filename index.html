@@ -6,6 +6,8 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Fontdiner+Swanky" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
         crossorigin="anonymous"></script>
@@ -19,15 +21,28 @@
 </head>
 <body>
     <div class="container">
-        <div class="row text-sm-center">
-            <div class="col-xs-12 text-center">
-                <h1 class="text-sm-center">Bikini Bottom Death Match</h1>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h1>Bikini Bottom Death Match</h1>
             </div>
         </div>
         <div class="row">
-            <!-- <div class="col-xs-12"> -->
+            <div class="col-xs-12">
+                <h2 id="section-title">Select a Character</h2> 
                 <div id="character-select" class="card-group"></div>
-            <!-- </div> -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="player-area">
+                    
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div id="opponent-area">
+                    
+                </div>
+            </div>
         </div>
     </div>
 

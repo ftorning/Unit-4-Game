@@ -1,6 +1,12 @@
 console.log("loaded");
 var charListElems = $("#character-select");
 
+var player;
+var opponent;
+var playerArea = $('#player-area');
+var opponentArea = $('#opponent-area');
+var title = $('#section-title');
+
 class Character {
     constructor(name, hitPoints, atkPower, defense, imgUrl) {
         this.name = name;
@@ -41,6 +47,41 @@ class Character {
         }
         this.exp += 10;
     }
+
+    getCard() {
+        var charCard = $('<div/>');
+        charCard.attr('id', this.name);
+        charCard.addClass("card");
+        charCard.addClass("text-center");
+        charCard.css("width", "16rem");
+
+        var charImg = $('<img/>');
+        charImg.addClass("card-img-top");
+        charImg.css("height", "160px");
+        charImg.css("width", "100%");
+        charImg.attr('src', this.imgUrl);
+        charImg.attr('alt', this.name);
+
+        var charCardBody = $('<div/>');
+        charCardBody.addClass('card-body');
+
+        var charTitle = $('<h5/>');
+        charTitle.addClass('card-title');
+        charTitle.text(this.name);
+
+        var charHp = $('<p/>');
+        charHp.text('Hit Points: ' + this.hitPoints);
+        
+        var charAttack = $('<p/>');
+        charAttack.text('Attack Power: ' + this.atkPower);
+
+        var charDef = $('<p/>');
+        charDef.text('Defense: ' + this.defense);
+
+        charCardBody.append([charTitle, charHp, charAttack, charDef]);
+        charCard.append([charImg, charCardBody]);
+        charListElems.append(charCard);
+    }
    
 }
 
@@ -52,41 +93,34 @@ console.log(sponge);
 
 charList = [sponge, squid, star, krab];
 
+// function popPlayerChoice
+
 $(document).ready(function() {
     $.each(charList, function(i) {
-        console.log(charList[i]);
-        var charCard = $('<div/>');
-        charCard.attr('id', charList[i].name);
-        charCard.addClass("card");
-        charCard.addClass("text-center");
-        charCard.css("width", "16rem");
+        charList[i].getCard();
+    })
 
-        var charImg = $('<img/>');
-        charImg.addClass("card-img-top");
-        charImg.css("width", "100%");
-        charImg.attr('src', charList[i].imgUrl);
-        charImg.attr('alt', charList[i].name);
-
-        var charCardBody = $('<div/>');
-        charCardBody.addClass('card-body');
-
-        var charTitle = $('<h5/>');
-        charTitle.addClass('card-title');
-        charTitle.text(charList[i].name);
-
-        var charHp = $('<p/>');
-        charHp.text('Hit Points: ' + charList[i].hitPoints);
-        
-        var charAttack = $('<p/>');
-        charAttack.text('Attack Power: ' + charList[i].atkPower);
-
-        var charDef = $('<p/>');
-        charDef.text('Defense: ' + charList[i].defense);
-
-        charCardBody.append([charTitle, charHp, charAttack, charDef]);
-        charCard.append([charImg, charCardBody]);
-        charListElems.append(charCard);
-
+    $('#character-select .card').on('click', function() {
+        if (!player) {
+            for (var i = 0; i < charList.length; i++) {
+                if (charList[i].name === $(this).attr('id')) {
+                    player = charList[i];
+                }
+            }
+            $(this).appendTo(playerArea);
+            $(this).css('background-color', '#77dd77');
+            title.text('Select an opponent');
+        } else if (player && !opponent) {
+            for (var i = 0; i < charList.length; i++) {
+                if (charList[i].name === $(this).attr('id')) {
+                    opponent = charList[i];
+                }
+            }
+            $(this).appendTo(opponentArea);
+            $(this).css('background-color', '#ff6961');
+            $('#character-select').addClass('d-none');
+            title.text('BATTLE');
+        }
     })
 });
 
